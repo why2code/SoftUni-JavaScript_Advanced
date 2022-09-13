@@ -11,4 +11,4 @@ function gcd(a,b) {
 }
 
 
-console.log(gcd(2154, 458));
+console.log(gcd(5, 15));
