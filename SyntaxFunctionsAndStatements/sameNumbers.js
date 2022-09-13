@@ -1,3 +1,4 @@
+'use strict'
 
 function sameNumbers(num){
     let numAsString = num.toString();
@@ -5,7 +6,7 @@ function sameNumbers(num){
     let isSame = true;
     let sum = Number(firstDigit);
 
-    for (let i = 0; i < numAsString.lenght; i++){
+    for (let i = 1; i < numAsString.length; i++){
         if (numAsString[i] !== firstDigit){
             isSame = false;
         }
@@ -17,5 +18,6 @@ function sameNumbers(num){
    
 }
 
-sameNumbers(66464);
-sameNumbers(722);
+
+sameNumbers(2222222);
+sameNumbers(1234);
