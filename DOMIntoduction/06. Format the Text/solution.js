@@ -6,7 +6,7 @@ function solve() {
   let result = "";
 
   if (sentencesToFormat.length > 0) {
-    result = `<p> ${sentencesToFormat[0]}`;
+    result = `<p> ${sentencesToFormat[0]}.`;
   }
 
   for (let i = 1; i < sentencesToFormat.length; i++) {
