@@ -1,22 +1,20 @@
 function solve() {
   let textInput = document.getElementById("input").value;
+  let arrText = textInput.split(".").filter(x => x);
 
-  let sentencesToFormat = Array.from(textInput.split('.')).filter(n => n);
+  let output = document.getElementById("output");
+  output.innerHTML = "";
 
-  let result = "";
+  for (let i = 0; i < arrText.length; i+=3) {
+      let res = [];
+      for(let x = 0; x < 3; x++){
+          if(arrText[i + x]){
+            res.push(arrText[i + x]);
+          }
+      }
 
-  if (sentencesToFormat.length > 0) {
-    result = `<p> ${sentencesToFormat[0]}.`;
+      let resText = res.join(". ") + ".";
+      output.innerHTML += `<p>${resText}</p>`;
   }
-
-  for (let i = 1; i < sentencesToFormat.length; i++) {
-    if (i % 3 === 0) {
-      result += `</p>`;
-      result += `<p>`;
-    }
-    result += `${sentencesToFormat[i]}.`;
-  }
-
-  document.getElementById("output").innerHTML = result;
 
 }
