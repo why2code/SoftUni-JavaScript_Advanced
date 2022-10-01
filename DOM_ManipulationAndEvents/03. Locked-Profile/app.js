@@ -8,25 +8,25 @@ function lockedProfile() {
         let checkForLockedUnlockedProfile = event.target.parentElement
             .querySelector("input[type=radio]:checked").value;
 
-        if (checkForLockedUnlockedProfile === "lock" &&
-            event.target.textContent === "Show more") {
-            return;
-        }
-        else if (checkForLockedUnlockedProfile === "lock" &&
-            event.target.textContent === "Hide it") {
+        if (checkForLockedUnlockedProfile === "lock"){
             return;
         }
         else {
-            event.target.disabled = false;
 
-            if (event.target.textContent === "Hide it") {
-                event.target.parentElement.querySelector("div").style.display = "";
-                event.target.textContent = "Show more";
+            let button = event.target.parentElement
+            .querySelector("input[value=lock]");
+
+            if(!button.checked){
+                if (event.target.textContent === "Hide it") {
+                    event.target.parentElement.querySelector("div").style.display = "";
+                    event.target.textContent = "Show more";
+                }
+                else {
+                    event.target.parentElement.querySelector("div").style.display = "block";
+                    event.target.textContent = "Hide it";
+                }
             }
-            else {
-                event.target.parentElement.querySelector("div").style.display = "block";
-                event.target.textContent = "Hide it";
-            }
+           
         }
 
 
