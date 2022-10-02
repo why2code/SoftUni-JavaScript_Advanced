@@ -1,16 +1,13 @@
 function getArticleGenerator(articles) {
-    let separateArticles = articles;
+    let articlesArray = articles;
 
-    let showNext = function showNextArticleOnPage() {
-        
+    return () => {
         let contentElement = document.getElementById("content");
         let newArtcl = document.createElement("article");
-
-        if (separateArticles.length > 0) {
-            newArtcl.textContent = separateArticles.shift();
+        if (articlesArray.length > 0) {
+            newArtcl.textContent = articlesArray.shift();
             contentElement.appendChild(newArtcl);
         }
     }
 
-    return showNext;
 }
