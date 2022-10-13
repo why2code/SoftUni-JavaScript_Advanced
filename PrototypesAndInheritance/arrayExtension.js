@@ -1,4 +1,4 @@
-function arrayExtension() {
+(function arrayExtension() {
 
     let arr = [1, 2, 3, 4, 5];
 
@@ -22,16 +22,5 @@ function arrayExtension() {
         return this.sum() / this.length
     }
 
-    console.log(arr.last())
-    console.log(arr.skip(2))
-    console.log(arr.take(3))
-    console.log(arr.sum())
-    console.log(arr.average())
-
-
-
-
-
-} 
-
-arrayExtension();
+  
+})()
