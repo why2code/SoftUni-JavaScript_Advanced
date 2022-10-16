@@ -36,9 +36,9 @@
     };
 
     String.format = function (str, ...params) {
-        params.forEach((word, index) => str = str.replace(`{${index}}`.toString(), word));
+        params.forEach((word, index) => str = str.replace(`{${index}}`.toString(), word))
         return str;
-    };
+    }
 
     // str = str.ensureStart('my');
     // console.log(str)
