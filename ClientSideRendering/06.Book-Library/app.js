@@ -46,6 +46,7 @@ async function onAdd(e) {
         loadBooks();
     }
 
+    render(await createTableRows(), body);
     addForm.reset();
 }
 
