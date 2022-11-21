@@ -1,0 +1,16 @@
+{
+  "name": "js_advanced-exam_prep",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^10.1.0",
+    "mocka": "^0.0.1"
+  }
+}
