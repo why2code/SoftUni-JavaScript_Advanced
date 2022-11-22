@@ -14,8 +14,14 @@ async function onSubmit(e){
     let {email, password, rePass} = Object.fromEntries(formData);
 
     //----------- Modify this validation according to the current task -----------
+    if(email == '' || password == "" || rePass == ""){
+        return alert("Email, Password and Repeat password can not be empty fields!")
+    }
+
     if(password !== rePass){
-        return context.render(createRegisterView("Passwords do not match, please try again!"))
+        return context.render(createRegisterView("Passwords do not match, please try again!"));
+        //OR SHOW AN ALERT, BASED ON CURRENT TASK:
+        //return alert("Passwords don\'t match");
     }
 
     await register(email, password);

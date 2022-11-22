@@ -13,6 +13,10 @@ async function onSubmit(e){
     let formData = new FormData(e.target);
     let {email, password} = Object.fromEntries(formData);
 
+    if(email == '' || password == ""){
+        return alert("Email and Password can not be empty fields!")
+    }
+
     try{
         await login(email, password);
     }

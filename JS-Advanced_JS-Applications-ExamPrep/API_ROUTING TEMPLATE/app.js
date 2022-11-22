@@ -32,6 +32,7 @@ page('/logout', async function () {
     page.redirect('/');
 });
 
+
 //----------- Modify the remaining views based on current task -----------
 page('/catalog', showCatalog);
 page('/about', showAbout);
@@ -48,6 +49,14 @@ function middleWare(ctx, next) {
         render(content, root);
     }
     ctx.modulateView = modulateView;
+
+    //Adding ctx.user so we can easily verify through context
+    //Can be used to display dynamic elements based on owner/not owner of an element
+    const user = JSON.parse(sessionStorage.getItem("userData"));
+    if(user){
+        ctx.user = user;
+    }
+
     next();
 }
 

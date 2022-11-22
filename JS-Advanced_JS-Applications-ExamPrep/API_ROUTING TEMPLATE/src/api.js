@@ -3,11 +3,11 @@ const host = 'http://localhost:3030/';
 export async function requester(method, url, body) {
     const options = {
         method,
-        headers: {}
+        headers: {}  
     }
 
-    if (body) {
-        options.headers['Content-Type'] = 'Application/json';
+    if (body !== undefined) {
+        options.headers['Content-Type'] = 'application/json';
         options.body = JSON.stringify(body);
     }
 

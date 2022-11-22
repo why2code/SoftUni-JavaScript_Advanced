@@ -4,7 +4,7 @@ import { html, nothing } from '../../node_modules/lit-html/lit-html.js'
 let context = null;
 export function showHome(ctx) {
     context = ctx;
-    let user = JSON.parse(sessionStorage.getItem("userData"));
+    let user = ctx.user;
     ctx.render(homeViewGenerator(user))
 }
 
