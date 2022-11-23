@@ -2,13 +2,13 @@
   "name": "js-advanced_js-applications-examprep",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.html",
   "directories": {
     "test": "tests"
   },
   "scripts": {
     "test": "mocha tests",
-    "start": "http-server -a localhost -p 3000 -P http://localhost:3000?",
+    "start": "http-server -a localhost -p 3000 -P http://localhost:3000? -c-1",
     "server": "lite-server",
     "dev": "lite-server"
   },
@@ -16,12 +16,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "chai": "^4.3.7",
+    "chai": "^4.3.4",
     "http-server": "^0.12.3",
     "lit-html": "^2.4.0",
     "lite-server": "^2.6.1",
-    "mocha": "^10.1.0",
+    "mocha": "^8.3.2",
     "page": "^1.11.6",
-    "playwright-chromium": "^1.9.1"
+    "playwright-chromium": "^1.9.2"
   }
 }
