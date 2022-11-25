@@ -8,28 +8,23 @@ export async function showDashboard(ctx) {
     ctx.render(catalogViewGenerator(allPets))
 }
 
-function catalogViewGenerator(allPets) {
-    return html`
+const catalogViewGenerator = (allPets) => 
+            html`
             <section id="dashboard">
                 <h2 class="dashboard-title">Services for every animal</h2>
-                ${allPets ?
-                html`
                 <div class="animals-dashboard">
-                    ${allPets.map(p => petBoardGenerator(p))} 
-                </div>
-            </section>`
-                 : 
-            html`
-                <div>
+                ${allPets.length == 0 ? html`
+                    <div>
                     <p class="no-pets">No pets in dashboard</p>
+                    </div>`
+                : allPets.map(petBoardGenerator)}
                 </div>
-            </section>`}
-            `;
-          
-}
+            </section>`;
+                      
 
-function petBoardGenerator(pet) {
-    return html`
+
+const petBoardGenerator = (pet) =>
+     html`
     <div class="animals-board">
         <article class="service-img">
             <img class="animal-image-cover" src="${pet.image}">
@@ -39,7 +34,4 @@ function petBoardGenerator(pet) {
         <div class="action">
             <a class="btn" href="data/pets/${pet._id}">Details</a> 
         </div>
-    </div>
-    `;
-    
-}
+    </div>`;

@@ -4,7 +4,6 @@ import {createNewPet} from '../dataController.js'
 let context = null;
 export async function showCreatepetView(ctx) {
     context = ctx;
-    let petId = ctx.params.id;
     context.render(createNewPetDetails());
 
 }
@@ -13,7 +12,9 @@ async function onSubmit(e){
     e.preventDefault();
     let form = new FormData(e.target);
     let {name, breed, age, weight, image} = Object.fromEntries(form);
-    debugger
+    if(!name || !breed || !age || !weight || !image){
+        return alert('Fields can not be blank!')
+    }
     await createNewPet(name, breed, age, weight, image);
     context.page.redirect('/');
 }

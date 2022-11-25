@@ -26,7 +26,7 @@ export async function showPetDetails(ctx) {
     }
 
     function onEdit(){
-        ctx.page.redirect(`/newcard/${currPetDetails._id}`)
+        ctx.page.redirect(`/create/${currPetDetails._id}`)
     }
 }
 
