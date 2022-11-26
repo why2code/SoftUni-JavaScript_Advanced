@@ -9,13 +9,10 @@ const root = document.querySelector('main');
 //IMPORT ROUTE SHOULD BE ACCURATE IF FILE STRUCTURE NOT MODIFIED
 import { showLogin } from './src/views/loginView.js';
 import { showRegister } from './src/views/registerView.js';
+import { showHome } from './src/views/homeView.js';
 import { logOut } from './src/dataController.js'
 
 
-// ----------- Modify this structure of VIEW models based on the current task -----------
-import { showAbout } from './src/views/aboutView.js';
-import { showCatalog } from './src/views/catalogView.js';
-import { showHome } from './src/views/homeView.js';
 
 
 //PAGE ROUTING TO LOGIN/REGISTER/LOGOUT + EXAMPLE VIEWS (HOME/CATALOG/ABOUT)
@@ -32,10 +29,8 @@ page('/logout', async function () {
     page.redirect('/');
 });
 
-
 //----------- Modify the remaining views based on current task -----------
-page('/catalog', showCatalog);
-page('/about', showAbout);
+
 
 
 
