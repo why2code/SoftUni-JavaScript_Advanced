@@ -1,71 +1,82 @@
 import { html, nothing } from '../../node_modules/lit-html/lit-html.js'
-import { deleteById, getSiglePetDetails } from '../dataController.js';
+import { deleteById, donate, getDonations, getOwnDonation, getSiglePetDetails } from '../dataController.js';
 
 export async function showPetDetails(ctx) {
     const id = ctx.params.id;
-    let isOwner = false;
-    let isLogged = false;
 
-    let currPetDetails = await getSiglePetDetails(id);
-    let ownerId = currPetDetails._ownerId;
+    const requests = [
+        getSiglePetDetails(id),
+        getDonations(id)
+    ];
 
-    const user = ctx.user;
-    if (user !== undefined) {
-        isLogged = true;
-        isOwner = user._id === ownerId;
+    const hasUser = ctx.user;
+    if (hasUser !== undefined) {
+        requests.push(getOwnDonation(id, hasUser._id))
     }
 
-    ctx.render(detailsTemplate(currPetDetails, isLogged, isOwner, onDelete, onEdit));
+    const [pet, donations, hasDonation] = await Promise.all(requests);
 
-    async function onDelete(){
+    let isOwner = hasUser && ctx.user._id == pet._ownerId;
+    const canDonate = !isOwner && hasDonation == 0;
+    
+    ctx.render(detailsTemplate(pet, donations * 100, hasUser, canDonate, isOwner, onDelete, onEdit, onDonate));
+
+    async function onDelete() {
         const delConfirmation = confirm("Are you sure you would like to delete this record?");
-        if(delConfirmation){
-            await deleteById(currPetDetails._id);
+        if (delConfirmation) {
+            await deleteById(pet._id);
             ctx.page.redirect('/');
         }
     }
 
-    function onEdit(){
-        ctx.page.redirect(`/create/${currPetDetails._id}`)
+    function onEdit() {
+        ctx.page.redirect(`/create/${pet._id}`)
+    }
+
+    async function onDonate(){
+       await donate(id);
+       ctx.page.redirect(`/data/pets/${id}`);
     }
 }
 
+function petControls(pet, hasUser, canDonate, isOwner, onDelete, onEdit, onDonate) {
+    if (hasUser == false) {
+        return nothing;
+    }
 
-function detailsTemplate(currPetDetails, isLogged, isOwner, onDelete, onEdit) {
+    if (canDonate) {
+        return html`
+        <div class="actionBtn">
+            <a @click=${onDonate} href="javascript:void(0)" class="donate">Donate</a>
+        </div>`;
+    }
+    if (isOwner) {
+        return html`
+        <div class="actionBtn">
+            <a @click=${onEdit} href="/create/${pet._id}" class="edit">Edit</a>
+            <a @click=${onDelete} href="javascript:void(0)" class="remove">Delete</a>
+        </div>
+        `;
+    }
+}
+
+function detailsTemplate(pet, donations, hasUser, canDonate, isOwner, onDelete, onEdit, onDonate) {
     return html`
     <section id="detailsPage">
         <div class="details">
             <div class="animalPic">
-                <img src="${currPetDetails.image}">
+                <img src="${pet.image}">
             </div>
             <div>
                 <div class="animalInfo">
-                    <h1>Name: ${currPetDetails.name}</h1>
-                    <h3>Breed: ${currPetDetails.breed}</h3>
-                    <h4>Age: ${currPetDetails.age}</h4>
-                    <h4>Weight: ${currPetDetails.weight}</h4>
-                    <h4 class="donation">Donation: 0$</h4>
+                    <h1>Name: ${pet.name}</h1>
+                    <h3>Breed: ${pet.breed}</h3>
+                    <h4>Age: ${pet.age}</h4>
+                    <h4>Weight: ${pet.weight}</h4>
+                    <h4 class="donation">Donation: ${donations}$</h4>
                 </div>
                 <!-- if there is no registered user, do not display div-->
-                ${isLogged ? 
-                html`
-                <div class="actionBtn">
-                    <!-- Only for registered user and creator of the pets-->
-                    ${isOwner ? 
-                    html`
-                     <a @click=${onEdit} href="/create/${currPetDetails._id}" class="edit">Edit</a>
-                     <a @click=${onDelete} href="javascript:void(0)" class="remove">Delete</a>
-                    `
-                    :
-                    html`
-                    <!--(Bonus Part) Only for no creator and user-->
-                    <a href="#" class="donate">Donate</a>
-                    `}
-                    
-                </div>
-                ` 
-                :
-                nothing};
+                ${petControls(pet, hasUser, canDonate, isOwner, onDelete, onEdit, onDonate)}
             </div>
         </div>
     </section>
