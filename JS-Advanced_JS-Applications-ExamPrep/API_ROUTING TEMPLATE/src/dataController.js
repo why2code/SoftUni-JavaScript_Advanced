@@ -2,9 +2,9 @@ import * as api from './api.js';
 
 //MODIFY ENDPOINTS BY ADDING NEW ROUTS AS PER CURRENT TASK
 const endpoints = {
-    'login' : 'users/login',
-    'register': 'users/register',
-    'logout': 'users/logout'
+    'login' : '/users/login',
+    'register': '/users/register',
+    'logout': '/users/logout'
 }
 
 export async function login(email, password){

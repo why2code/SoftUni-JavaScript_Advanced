@@ -1,5 +1,5 @@
 //VERIFY IMPORT ROUTES, HOWEVER ROUTES SHOULD BE ACCURATE IF FILE STRUCTURE NOT MODIFIED
-import { html, nothing } from '../../node_modules/lit-html/lit-html.js'
+import { html } from '../../node_modules/lit-html/lit-html.js'
 import { login } from '../dataController.js'
 
 let context = null;

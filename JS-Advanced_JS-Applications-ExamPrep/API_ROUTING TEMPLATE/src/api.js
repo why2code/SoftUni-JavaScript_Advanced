@@ -1,4 +1,4 @@
-const host = 'http://localhost:3030/';
+const host = 'http://localhost:3030';
 
 export async function requester(method, url, body) {
     const options = {
