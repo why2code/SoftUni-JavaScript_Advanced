@@ -9,7 +9,7 @@ const endpoints = {
     'newTheater' : '/data/theaters',
     'theaterDetails' : '/data/theaters/',
     'deleteTheater' : '/data/theaters/',
-    'addLike' : '/data/likes'
+    'like' : '/data/likes'
 }
 
 export async function login(email, password){
@@ -52,8 +52,8 @@ export async function updateTheaterDetails(id, title, date, author, description,
     return api.put(endpoints.theaterDetails + id, {title, date, author, description, imageUrl});
 }
 
-export async function addLike(id){
-    return api.post(endpoints.addLike, {id});
+export async function addLike(theaterId){
+    return api.post(endpoints.like, {theaterId});
 }
 
 export async function likesOfTheater(theaterId){

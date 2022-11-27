@@ -3,17 +3,17 @@ import { addLike, deleteTheater, likesOfTheater, singleTheaterDetails, userLikes
 
 export async function showDetails(ctx) {
     const user = ctx.user;
-    const id = ctx.params.id;
+    const theaterId = ctx.params.id;
     let isOwner = false;
 
 
     const requests = [
-        singleTheaterDetails(id),
-        likesOfTheater(id)
+        singleTheaterDetails(theaterId),
+        likesOfTheater(theaterId)
     ];
 
     if(user !== undefined){
-        requests.push(userLikesForATheater(id, user._id))
+        requests.push(userLikesForATheater(theaterId, user._id))
     }
 
     const [theaterDetail, theaterLikes, userLikes] = await Promise.all(requests);  
@@ -23,14 +23,14 @@ export async function showDetails(ctx) {
     
 
     async function onDelete() {
-        await deleteTheater(id);
+        await deleteTheater(theaterId);
         ctx.page.redirect('/profile'); 
     }
     
    ctx.render(templateDetailsVeiw(theaterDetail, isOwner, onDelete, theaterLikes, canLike, onLike));
     
     async function onLike(){
-        await addLike(id);
+        await addLike(theaterId);
         ctx.page.redirect(`/details/${theaterDetail._id}`);
     }
 }
