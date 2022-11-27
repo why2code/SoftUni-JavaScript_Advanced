@@ -8,7 +8,9 @@ const endpoints = {
     'getAllGames' : '/data/games?sortBy=_createdOn%20desc&distinct=category',
     'catalogueGames' : '/data/games?sortBy=_createdOn%20desc',
     'newGame' : '/data/games',
-    'singleGameDetails' : '/data/games/'
+    'singleGameDetails' : '/data/games/',
+    'createComment' : '/data/comments'
+    
 }
 
 export async function login(email, password){
@@ -49,4 +51,12 @@ export async function singleGameDetails(id){
 
  export async function updateExistingGame(id, title, category, maxLevel, imageUrl, summary){
     return api.put(endpoints.singleGameDetails + id, {title, category, maxLevel, imageUrl, summary});
+ }
+
+ export async function loadAllComments(gameId){
+    return api.get(`/data/comments?where=gameId%3D%22${gameId}%22`);
+ }
+
+ export async function createComment(gameId, comment){
+    return api.post(endpoints.createComment, {gameId, comment});
  }

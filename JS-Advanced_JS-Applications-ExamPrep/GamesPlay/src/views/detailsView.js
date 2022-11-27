@@ -1,29 +1,42 @@
 import { html, nothing } from '../../node_modules/lit-html/lit-html.js'
-import { deleteGame, singleGameDetails } from '../dataController.js';
+import { createComment, deleteGame, loadAllComments, singleGameDetails } from '../dataController.js';
 
 export async function showGameDetails(ctx) {
     const id = ctx.params.id;
     const user = ctx.user;
     let isOwner = false;
+    let isLoggedIn = false;
 
     let currGame = await singleGameDetails(id)
 
     if(user){
         const creatorId = user._id;
         isOwner = creatorId == currGame._ownerId;
+        isLoggedIn = true;
     }
 
+    let comments = await loadAllComments(id);
     
-    ctx.render(templGameDetailsView(currGame, isOwner, onDelete));
+    ctx.render(templGameDetailsView(currGame, isOwner, onDelete, comments, isLoggedIn, renderComments));
 
     async function onDelete(){
         await deleteGame(id);
         ctx.page.redirect('/');
     }
+
+    async function renderComments(e){
+        e.preventDefault();
+        let form = new FormData(e.target);
+        let comment = Object.fromEntries(form);
+
+        await createComment(id, comment);
+        e.target.reset();
+        ctx.page.redirect(`/details/${id}`);
+    }
 }
 
 
-function templGameDetailsView(currGame, isOwner, onDelete) {
+function templGameDetailsView(currGame, isOwner, onDelete, comments, isLoggedIn, renderComments) {
     return html`
     <section id="game-details">
         <h1>Game Details</h1>
@@ -41,8 +54,17 @@ function templGameDetailsView(currGame, isOwner, onDelete) {
             </p>
     
             <!-- Bonus bonusCommentsSection -->
-          
-    
+            ${comments.length > 0 ?
+            bonusCommentsSection(comments)
+             :
+              html`
+               <div class="details-comments">
+                    <h2>Comments:</h2>
+                         <p class="no-comment">No comments.</p>
+              </div>
+              `
+            }
+
             ${isOwner ? 
             html`<div class="buttons">
                 <a href="/edit/${currGame._id}" class="button">Edit</a>
@@ -51,7 +73,12 @@ function templGameDetailsView(currGame, isOwner, onDelete) {
             : nothing}
             
         </div>
-    
+            
+        ${isLoggedIn && !isOwner ?
+        addNewComment(renderComments)
+        :
+        nothing
+        }
         <!-- Bonus -->
         <!--addNewComment -->
         
@@ -60,32 +87,32 @@ function templGameDetailsView(currGame, isOwner, onDelete) {
     `;
 }
 
-function bonusCommentsSection(){
+function bonusCommentsSection(comments){
     return html`
     <!-- Bonus ( for Guests and Users ) -->
-    <div class="details-comments">
+         <div class="details-comments">
                 <h2>Comments:</h2>
                 <ul>
                     <!-- list all comments for current game (If any) -->
+                    ${comments.map(c => html`
                     <li class="comment">
-                        <p>Content: I rate this one quite highly.</p>
+                        <p>Content: ${c.comment.comment}</p>
                     </li>
-                    <li class="comment">
-                        <p>Content: The best game.</p>
-                    </li>
+                    `)}
+                                       
                 </ul>
                 <!-- Display paragraph: If there are no games in the database -->
-                <p class="no-comment">No comments.</p>
-            </div>
+                
+          </div>
     `;
 }
 
-function addNewComment(){
+function addNewComment(renderComments){
     return html`
       <!-- Add Comment ( Only for logged-in users, which is not creators of the current game ) -->
       <article class="create-comment">
             <label>Add new comment:</label>
-            <form class="form">
+            <form @submit=${renderComments} class="form">
                 <textarea name="comment" placeholder="Comment......"></textarea>
                 <input class="btn submit" type="submit" value="Add Comment">
             </form>
