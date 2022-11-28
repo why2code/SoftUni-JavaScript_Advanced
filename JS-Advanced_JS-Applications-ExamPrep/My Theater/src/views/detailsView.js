@@ -5,6 +5,7 @@ export async function showDetails(ctx) {
     const user = ctx.user;
     const theaterId = ctx.params.id;
     let isOwner = false;
+    let canLike = false;
 
 
     const requests = [
@@ -18,8 +19,11 @@ export async function showDetails(ctx) {
 
     const [theaterDetail, theaterLikes, userLikes] = await Promise.all(requests);  
   
-    isOwner = user._id === theaterDetail._ownerId;
-    let canLike = !isOwner && userLikes == 0;
+    
+    if(user !== undefined){
+        isOwner = user._id === theaterDetail._ownerId;
+        canLike = !isOwner && userLikes == 0;
+    }
     
 
     async function onDelete() {
