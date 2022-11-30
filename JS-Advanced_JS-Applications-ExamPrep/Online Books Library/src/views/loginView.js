@@ -1,51 +1,53 @@
 //VERIFY IMPORT ROUTES, HOWEVER ROUTES SHOULD BE ACCURATE IF FILE STRUCTURE NOT MODIFIED
-import { html, nothing } from '../../node_modules/lit-html/lit-html.js'
-import {login} from '../dataController.js'
+import { html } from '../../node_modules/lit-html/lit-html.js'
+import { login } from '../dataController.js'
 
-let context = null;
-export function showLogin(ctx){
-    context = ctx;
-    ctx.render(createLoginView())
-}
+export function showLogin(ctx) {
 
-async function onSubmit(e){
-    e.preventDefault();
-    let formData = new FormData(e.target);
-    let {email, password} = Object.fromEntries(formData);
+    ctx.render(createLoginView(onSubmit))
 
-    if(email == '' || password == ""){
-        return alert("Email and Password can not be empty fields!")
-    }
 
-    try{
+    async function onSubmit(e) {
+        e.preventDefault();
+        let formData = new FormData(e.target);
+        let { email, password } = Object.fromEntries(formData);
+
+        if (email == '' || password == "") {
+            return alert("Email and Password can not be empty fields!")
+        }
+
+
         await login(email, password);
+        ctx.updateNav();
+        ctx.page.redirect('/');
     }
-    catch (err){
-        return context.render(createLoginView(err.message));
-    }
-    context.modulateView();
-    context.page.redirect('/');
 }
+
+
 
 //EXAMPLE HTML - NEEDS ADJUSTING BASED ON THE index.html FILE PROVIDED WITH THE TASK
 //INCLUDES TRY-CATCH IF INVALID EMAIL/PASSWORD
-function createLoginView(errorMsg){
+function createLoginView(onSubmit) {
     return html`
-         <form @submit=${onSubmit}>
-            <div>
-                <div class="col-md-4">
-                    <div>
-                        ${errorMsg ? html`<div>${errorMsg}</div>` : nothing}
-                        <label class="form-control-label" for="email">Email</label>
-                        <input class="form-control" id="email" type="text" name="email">
-                    </div>
-                    <div>
-                        <label class="form-control-label" for="password">Password</label>
-                        <input class="form-control" id="password" type="password" name="password">
-                    </div>
-                    <input type="submit" class="btn btn-primary" value="Login" />
-                </div>
-            </div>
-        </form>
+        <section id="login-page" class="login">
+            <form @submit=${onSubmit} id="login-form" action="" method="">
+                <fieldset>
+                    <legend>Login Form</legend>
+                    <p class="field">
+                        <label for="email">Email</label>
+                        <span class="input">
+                            <input type="text" name="email" id="email" placeholder="Email">
+                        </span>
+                    </p>
+                    <p class="field">
+                        <label for="password">Password</label>
+                        <span class="input">
+                            <input type="password" name="password" id="password" placeholder="Password">
+                        </span>
+                    </p>
+                    <input class="button submit" type="submit" value="Login">
+                </fieldset>
+            </form>
+        </section>
         `;
 }

@@ -1,29 +1,37 @@
 //VERIFY IMPORT ROUTES, HOWEVER ROUTES SHOULD BE ACCURATE IF FILE STRUCTURE NOT MODIFIED
-import { html, nothing } from '../../node_modules/lit-html/lit-html.js'
+import { html } from '../../node_modules/lit-html/lit-html.js'
+import { loadBooks } from '../dataController.js';
 
-let context = null;
-export function showHome(ctx) {
-    context = ctx;
-    let user = ctx.user;
-    ctx.render(homeViewGenerator(user))
+export async function showHome(ctx) {
+
+    let books = await loadBooks();
+    ctx.render(homeViewGenerator(books))
 }
 
-function homeViewGenerator(userLoggedInOrNot) {
+function homeViewGenerator(books) {
       return html`
-        <h2>This is the Home Page</h2>
-        <div>
-            <p>Below Area displays content based on user being logged in or not!</p>
-            ${userLoggedInOrNot ? 
-            html`
-            <div>
-                 <p>You are seeing this paragraph, as you are logged in!</p>
-                 <ul>
-                     <li>Sensitive item 1...</li>
-                     <li>Sensitive item 2...</li>
-                     <li>Sensitive item 3...</li>
-                 </ul>
-            </div>` 
-            : html`<p>No user logged in - nothing to see here buddy! :) </p>` }
-        </div>
-        `;
+          <section id="dashboard-page" class="dashboard">
+            <h1>Dashboard</h1>
+            <!-- Display ul: with list-items for All books (If any) -->
+            ${books.length > 0 ?
+                books.map(bookTemp)
+            :
+             html`<p class="no-books">No books in database!</p>`
+            }
+          </section>
+      `;
+          
+}
+
+function bookTemp(book){
+    return  html`
+    <ul class="other-books-list">
+       <li class="otherBooks">
+        <h3>${book.title}</h3>
+        <p>Type: ${book.type}</p>
+        <p class="img"><img src=${book.imageUrl}></p>
+        <a class="button" href="/mybooks/${book._id}">Details</a>
+       </li>
+   </ul>
+    `
 }
